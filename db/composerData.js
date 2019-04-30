@@ -2,7 +2,7 @@ const composerData = [
   {
     name: 'Johann Sebastian Bach',
     nationality: 'German',
-    lifeSpan: '1685-1750',
+    lifespan: '1685-1750',
     choralWorks: [
       {
         name: 'Matthaus-Passion',
@@ -29,7 +29,7 @@ const composerData = [
   {
     name: 'Antonio Vivaldi',
     nationality: 'Italian',
-    lifeSpan: '1678-1741',
+    lifespan: '1678-1741',
     choralWorks: [
       {
         name: 'Gloria',
@@ -48,7 +48,7 @@ const composerData = [
   {
     name: 'George Frideric Handel',
     nationality: 'German',
-    lifeSpan: '1685-1759',
+    lifespan: '1685-1759',
     choralWorks: [
       {
         name: 'Joy to the World',
@@ -67,7 +67,7 @@ const composerData = [
   {
     name: 'Henry Purcell',
     nationality: 'English',
-    lifeSpan: '1659-1695',
+    lifespan: '1659-1695',
     choralWorks: [
       {
         name: 'Sing for Joy',
@@ -86,7 +86,7 @@ const composerData = [
   {
     name: 'Claudio Monteverdi',
     nationality: 'Italian',
-    lifeSpan: '1567-1643',
+    lifespan: '1567-1643',
     choralWorks: [
       {
         name: 'Vespers',
@@ -105,7 +105,7 @@ const composerData = [
   {
     name: 'Heinrich Schütz',
     nationality: 'German',
-    lifeSpan: '1585-1672',
+    lifespan: '1585-1672',
     choralWorks: [
       {
         name: 'German Requiem',
@@ -124,7 +124,7 @@ const composerData = [
   {
     name: 'Domenico Scarlatti',
     nationality: 'Italian',
-    lifeSpan: '1685-1757',
+    lifespan: '1685-1757',
     choralWorks: [
       {
         name: 'We Will Sing for Joy',
@@ -143,7 +143,7 @@ const composerData = [
   {
     name: 'Jean-Philippe Rameau',
     nationality: 'French',
-    lifeSpan: '1683-1764',
+    lifespan: '1683-1764',
     choralWorks: [
       {
         name: 'Platee Chantons Bacchus',
@@ -162,7 +162,7 @@ const composerData = [
   {
     name: 'Arcangelo Corelli',
     nationality: 'Italian',
-    lifeSpan: '1653-1713',
+    lifespan: '1653-1713',
     choralWorks: [
       {
         name: 'Pastorale',
@@ -181,7 +181,7 @@ const composerData = [
   {
     name: 'Georg Philipp Telemann',
     nationality: 'German',
-    lifeSpan: '1681-1767',
+    lifespan: '1681-1767',
     choralWorks: [
       {
         name: 'St. John Passion',

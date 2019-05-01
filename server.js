@@ -10,6 +10,8 @@ app.get('/', (req, res) => res.send('Hello World!'))
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
+
+// GET all composers
 app.get('/api/v1/composers', (request, response) => {
   database('composers').select()
     .then((composers) => {
@@ -20,6 +22,8 @@ app.get('/api/v1/composers', (request, response) => {
     });
 });
 
+
+// GET all compositions
 app.get('/api/v1/compositions', (request, response) => {
   database('compositions').select()
     .then((choralWorks) => {
@@ -29,3 +33,62 @@ app.get('/api/v1/compositions', (request, response) => {
       response.status(500).json({ error });
     });
 });
+
+// GET a particular composer
+app.get('/api/v1/composers/:id', (request, response) => {
+  database('composers').where('id', request.params.id).select()
+    .then(composer => {
+      if (composer.length) {
+        response.status(200).json(composer);
+      } else {
+        response.status(404).json({
+          error: `Composer with id ${request.params.id} not found`
+        });
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
+});
+
+// GET a particular composition
+app.get('/api/v1/compositions/:id', (request, response) => {
+  database('compositionss').where('id', request.params.id).select()
+    .then(composition => {
+      if (composition.length) {
+        response.status(200).json(composition);
+      } else {
+        response.status(404).json({
+          error: `Composition with id ${request.params.id} not found`
+        });
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
+});
+
+// GET all compositions by a particular composer
+app.get('/api/v1/composers/:id/compositions', (request, response) => {
+  database('compositions').where('composer_id', request.params.id).select()
+    .then(compositions => {
+      if (compositions.length) {
+        response.status(200).json(compositions)
+      } else {
+        response.status(404).json({
+          error: `Could not find compositions for composer with id ${request.params.id}`
+        });
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
+});
+
+// POST a composer
+
+// POST a composition
+
+// DELETE a composer
+
+// DELETE a composition

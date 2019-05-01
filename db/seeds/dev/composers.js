@@ -1,5 +1,7 @@
 const composerData = require('../../composerData.js');
 
+          // make composer_id - knex docs to change name
+
 const createComposer = (knex, composer) => {
   return knex('composers').insert({
     name: composer.name,

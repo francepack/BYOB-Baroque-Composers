@@ -199,4 +199,4 @@ const composerData = [
   }
 ]
 
-module.exports = composerData
+module.exports = composerData;

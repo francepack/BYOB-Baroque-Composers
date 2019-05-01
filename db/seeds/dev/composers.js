@@ -1,4 +1,4 @@
-const composerData = require('../../composerData')
+const composerData = require('../../composerData.js');
 
 const createComposer = (knex, composer) => {
   return knex('composers').insert({
@@ -12,23 +12,23 @@ const createComposer = (knex, composer) => {
     composer.choralWorks.forEach(work => {
       choralWorkPromises.push(
         createChoralWork(knex, {
-          work: work,
-          composer_id: composerId[0]
+          name: work.name,
+          arrangedFor: work.arrangedFor,
+          composers_id: composerId[0]
         })
       )
     });
-
-    return Promise.all(footnotePromises);
+    return Promise.all(choralWorkPromises);
   })
 };
 
 const createChoralWork = (knex, work) => {
-  return knex('choralWorks').insert(work);
+  return knex('compositions').insert(work);
 };
 
 exports.seed = (knex, Promise) => {
-  return knex('choralWorks').del() // delete footnotes first
-    .then(() => knex('composers').del()) // delete all papers
+  return knex('compositions').del()
+    .then(() => knex('composers').del()) 
     .then(() => {
       let composerPromises = [];
 
@@ -38,5 +38,6 @@ exports.seed = (knex, Promise) => {
 
       return Promise.all(composerPromises);
     })
+    .then(() => console.log('seeding complete'))
     .catch(error => console.log(`Error seeding data: ${error}`));
 };

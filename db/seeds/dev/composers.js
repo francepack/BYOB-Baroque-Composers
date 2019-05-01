@@ -1,7 +1,5 @@
 const composerData = require('../../composerData.js');
 
-          // make composer_id - knex docs to change name
-
 const createComposer = (knex, composer) => {
   return knex('composers').insert({
     name: composer.name,
@@ -16,7 +14,7 @@ const createComposer = (knex, composer) => {
         createChoralWork(knex, {
           name: work.name,
           arrangedFor: work.arrangedFor,
-          composers_id: composerId[0]
+          composer_id: composerId[0]
         })
       )
     });

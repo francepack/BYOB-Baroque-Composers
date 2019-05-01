@@ -86,8 +86,43 @@ app.get('/api/v1/composers/:id/compositions', (request, response) => {
 });
 
 // POST a composer
+app.post('api/v1/composers', (request, response) => {
+  const composer = request.body;
+    for (let requiredParameter of ['name', 'nationality', 'lifespan']) {
+      if (!composer[requiredParameter]) {
+        return response
+          .status(422)
+          .send({ error: `Expected format: { name: <string>, nationality: <string>, lifespan: <string> }`});
+      }
+    }
+    database('composers').insert(composer, 'id')
+      .then(composer =>  
+        response.status(201).json(composer)
+      })
+      .catch(error => {
+        response.status(500).json({ error })
+      });
+});
 
 // POST a composition
+// app.post('api/v1/compositions', (request, response) => {
+//   const composition = request.body;
+//     for (let requiredParameter of ['name', 'arrangedFor']) {
+//       if(!composition[requiredParameter]) {
+//         return response
+//           .status(422)
+//           .send({ error: `Expected format: { name: <string>, arrangedFor: <string>, composer_id: <string> }`});
+//       }
+//     }
+//     database('compositions').insert(composition, 'id')
+//       .then(composition =>  
+//         response.status(201).json()  <===||
+//       })
+//       .catch(error => {
+//         response.status(500).json({ error })
+//       });
+// });
+// how would we give this a foreign id, associate with composer?
 
 // DELETE a composer
 

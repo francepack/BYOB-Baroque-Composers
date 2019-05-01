@@ -53,7 +53,7 @@ app.get('/api/v1/composers/:id', (request, response) => {
 
 // GET a particular composition
 app.get('/api/v1/compositions/:id', (request, response) => {
-  database('compositionss').where('id', request.params.id).select()
+  database('compositions').where('id', request.params.id).select()
     .then(composition => {
       if (composition.length) {
         response.status(200).json(composition);
@@ -96,7 +96,7 @@ app.post('api/v1/composers', (request, response) => {
       }
     }
     database('composers').insert(composer, 'id')
-      .then(composer =>  
+      .then(composer => {
         response.status(201).json(composer)
       })
       .catch(error => {

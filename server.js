@@ -210,7 +210,54 @@ app.post('api/v1/composers/:id/compositions', (request, response) => {
 });
 
 // DELETE a composer
-
-// Will deleting a composer get rid of their compositions?
+app.delete('/api/v1/composers/:id', (request, response) => {
+  let found = false;
+  database('composers').select()
+    .then(composers => {
+      composers.forEach(composer => {
+        if (composer.id === parseInt(request.param.id)) {
+          found = true;
+        }
+      });
+      if(!found) {
+        return response.status(404).json({ error: `Composer at id ${request.params.id} was not found`});
+      } else {
+        database('compositions').where('composer_id', request.params.id).del()
+          .then(() => {
+            database('composers').where('id', request.params.id).del()
+              .then(() => {
+                response.status(202)
+                  .json(`Successful delete of composer id ${request.params.id}`)
+              })
+          })
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    });
+});
 
 // DELETE a composition
+app.delete('/api/v1/compositions/:id', (request, response) => {
+  let found = false;
+  database('compositions').select()
+    .then(compositions => {
+      compositions.forEach(composition => {
+        if (composition.id === parseInt(request.param.id)) {
+          found = true;
+        }
+      });
+      if(!found) {
+        return response.status(404).json({ error: `Composition at id ${request.params.id} was not found`});
+      } else {
+        database('composition').where('id', request.params.id).del()
+          .then(() => {
+            response.status(202)
+              .json(`Successful delete of composition id ${request.params.id}`)
+          })
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    });
+});

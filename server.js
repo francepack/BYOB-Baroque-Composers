@@ -134,7 +134,8 @@ app.get('/api/v1/composers/:id/compositions', (request, response) => {
 });
 
 // POST a composer
-app.post('api/v1/composers', (request, response) => {
+app.post('/api/v1/composers', (request, response) => {
+  console.log('hey')
 // calls post method on app at url in the first parameter. user will provide a body which will be used to post a new composer to the database
   const composer = request.body;
 // declare variable composer as the body of the request made by user making post request
@@ -165,7 +166,7 @@ app.post('api/v1/composers', (request, response) => {
 });
 
 // POST a composition
-app.post('api/v1/composers/:id/compositions', (request, response) => {
+app.post('/api/v1/composers/:id/compositions', (request, response) => {
 // calls post method on app at url in the first parameter. user will provide a body which will be used to post a new composition to the database
   const composition = request.body;
 // declare variable composition as the body of the request made by user making post request
@@ -220,7 +221,8 @@ app.delete('/api/v1/composers/:id', (request, response) => {
 // after we get the data, name it composers and...
       composers.forEach(composer => {
 // for each composer 
-        if (composer.id === parseInt(request.param.id)) {
+        console.log(request.params.id)
+        if (composer.id === parseInt(request.params.id)) {
 // check to see if the id matches the id in the url
           found = true;
 // if a match is found, assign variable 'found' to true
@@ -266,7 +268,7 @@ app.delete('/api/v1/compositions/:id', (request, response) => {
 // after we get the data, name it composers and...
       compositions.forEach(composition => {
 // for each composition
-        if (composition.id === parseInt(request.param.id)) {
+        if (composition.id === parseInt(request.params.id)) {
 // check to see if the id matches the id in the url
           found = true;
 // if a match is found, assign variable 'found' to true
@@ -277,7 +279,7 @@ app.delete('/api/v1/compositions/:id', (request, response) => {
         return response.status(404).json({ error: `Composition at id ${request.params.id} was not found`});
 // return out of this method and send a response with status 404 and a parsed error message
       } else {
-        database('composition').where('id', request.params.id).del()
+        database('compositions').where('id', request.params.id).del()
 // look into database composers, find the composer with an id that matches the request id, then delete it
           .then(() => {
 // after that, we trigger a response with a callback as DELETE does not have a return

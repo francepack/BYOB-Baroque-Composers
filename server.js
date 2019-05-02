@@ -129,6 +129,77 @@ app.post('/api/v1/composers/:id/compositions', (request, response) => {
     });
 });
 
+// PUT existing composer
+app.put('/api/v1/composers/:id', (request, response) => {
+  const composer = request.body;
+  for (let requiredParameter of ['name', 'nationality', 'lifespan']) {
+    if (!composer[requiredParameter]) {
+      return response
+        .status(422)
+        .send({ error: `Expected format: { name: <string>, nationality: <string>, lifespan: <string> }`});
+    }
+  }
+  let found = false;
+  database('composers').select()
+    .then(composers => {
+      composers.forEach(composer => {
+        if (composer.id === parseInt(request.params.id)) {
+          found = true;
+        }
+      });
+      if(!found) {
+        return response.status(404).json({ error: `Composer at id ${request.params.id} was not found`});
+      } else {
+      database('composers').where('id', request.params.id).update({
+        name: request.body.name,
+        nationality: request.body.nationality,
+        lifespan: request.body.lifespan
+      })
+      .then(composer => {
+        response.status(202).json(`Replacement of id ${request.params.id} complete.`)
+      })
+    } 
+  })
+  .catch(error => {
+    response.status(500).json({ error })
+  });
+});
+
+// PUT existing composition
+app.put('/api/v1/compositions/:id', (request, response) => {
+  const composition = request.body;
+  for (let requiredParameter of ['name', 'arrangedFor']) {
+    if (!composition[requiredParameter]) {
+      return response
+        .status(422)
+        .send({ error: `Expected format: { name: <string>, arrangedFor: <string> }`});
+    }
+  }
+  let found = false;
+  database('compositions').select()
+    .then(compositions => {
+      compositions.forEach(composition => {
+        if (composition.id === parseInt(request.params.id)) {
+          found = true;
+        }
+      });
+      if(!found) {
+        return response.status(404).json({ error: `Composition at id ${request.params.id} was not found`});
+      } else {
+      database('compositions').where('id', request.params.id).update({
+        name: request.body.name,
+        arrangedFor: request.body.arrangedFor
+      })
+      .then(composition => {
+        response.status(202).json(`Replacement of id ${request.params.id} complete.`)
+      })
+    } 
+  })
+  .catch(error => {
+    response.status(500).json({ error })
+  });
+});
+
 // DELETE a composer
 app.delete('/api/v1/composers/:id', (request, response) => {
   let found = false;
@@ -147,7 +218,7 @@ app.delete('/api/v1/composers/:id', (request, response) => {
             database('composers').where('id', request.params.id).del()
               .then(() => {
                 response.status(202)
-                  .json(`Successful delete of composer id ${request.params.id}`)
+                  .json(`Successful deletion of composer id ${request.params.id}`)
               })
           })
       }
@@ -173,7 +244,7 @@ app.delete('/api/v1/compositions/:id', (request, response) => {
         database('compositions').where('id', request.params.id).del()
           .then(() => {
             response.status(202)
-              .json(`Successful delete of composition id ${request.params.id}`)
+              .json(`Successful deletion of composition id ${request.params.id}`)
           })
       }
     })

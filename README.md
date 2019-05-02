@@ -141,10 +141,10 @@ Add a composer to the database.
 **Request-Body Input Description**
 
 | Key Name | Data Type | Description |
-| ---- | ---- | ---- |
-| `name` | `string` | Composer's full name |
-| `nationality` | `string` | Birth heritage of composer |
-| `lifespan` | `string` | year born to year of death |
+| ---- | :----: | ---- |
+| **name** | `string` | Composer's full name |
+| **nationality** | `string` | Birth heritage of composer |
+| **lifespan** | `string` | year born to year of death |
 
 **Example Request:**
 ```
@@ -165,9 +165,9 @@ Make get request to composers to see if composer is in the database. If so, use 
 **Request-Body Input Description**
 
 | Key Name | Data Type | Description |
-| ---- | ---- | ---- |
-| `name` | `string` | Composition's name |
-| `arrangedFor` | `string` | Description of the voice parts and instrumentation |
+| ---- | :----: | ---- |
+| **name** | `string` | Composition's name |
+| **arrangedFor** | `string` | Chorus voice part/instrumentation description |
 
 **Example Request:**
 ```

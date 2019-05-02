@@ -6,8 +6,8 @@ Every choir student should sing something from the Baroque time period. The embe
 
 # API Calls
 ## Get
-#### GET '/api/v1/composers'
-Get all composers
+### GET */api/v1/composers*
+Get all composers from database.
 
 **Example Response:**
 ```
@@ -38,8 +38,8 @@ Get all composers
   }
 ]
 ```
-#### GET '/api/v1/compositions'
-Get all compositions
+### GET */api/v1/compositions*
+Get all compositions from database.
 
 **Example Response:**
 ```
@@ -71,8 +71,8 @@ Get all compositions
 ]
 ```
 
-#### GET '/api/v1/composers/:id'
-Get a particular composer by id
+### GET */api/v1/composers/:id*
+Get a particular composer by id.
 
 **Example Response:**
 ```
@@ -86,8 +86,8 @@ Get a particular composer by id
 }
 ```
 
-#### GET '/api/v1/compositions/:id'
-Get a particular composition by id
+### GET */api/v1/compositions/:id*
+Get a particular composition by id.
 
 **Example Response:**
 ```
@@ -101,8 +101,8 @@ Get a particular composition by id
 }
 ```
 
-#### GET '/api/v1/composers/:id/compositions'
-Get all compositions of a composer by composer id
+### GET */api/v1/composers/:id/compositions*
+Get all compositions of a composer by composer id.
 
 **Example Response:**
 ```
@@ -135,8 +135,8 @@ Get all compositions of a composer by composer id
 ```
 
 ## POST
-#### POST '/api/v1/composers'
-Add a composer to the database
+### POST */api/v1/composers*
+Add a composer to the database.
 
 **Request-Body Input Description**
 
@@ -155,7 +155,7 @@ Add a composer to the database
 }
 ```
 
-#### POST '/api/v1/composers/:id/composition'
+### POST */api/v1/composers/:id/composition*
 Add a composition to the database 
 
 **Note: This compositions composer must also be in the database**
@@ -178,7 +178,7 @@ Make get request to composers to see if composer is in the database. If so, use 
 ```
 
 ## Delete
-#### DELETE '/api/v1/composers/:id'
+### DELETE */api/v1/composers/:id*
 **Warning: Deleting a composer will delete all of their compositions**
 
 Delete a composer of a given id
@@ -188,7 +188,7 @@ Delete a composer of a given id
   `Successful delete of composer id 29`
 ```
 
-#### DELETE '/api/v1/compositions/:id'
+### DELETE */api/v1/compositions/:id*
 Delete a composition of a given id
 
 **Example Response:**

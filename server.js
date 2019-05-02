@@ -211,53 +211,87 @@ app.post('api/v1/composers/:id/compositions', (request, response) => {
 
 // DELETE a composer
 app.delete('/api/v1/composers/:id', (request, response) => {
+// calls delete method on app at url in the first parameter. deletes a composer at the given id in url
   let found = false;
+// declare variable to serve as trigger to track if composer at given id was found 
   database('composers').select()
+// look to dataset composer and get that data
     .then(composers => {
+// after we get the data, name it composers and...
       composers.forEach(composer => {
+// for each composer 
         if (composer.id === parseInt(request.param.id)) {
+// check to see if the id matches the id in the url
           found = true;
+// if a match is found, assign variable 'found' to true
         }
       });
       if(!found) {
+// if variable 'found' is falsey
         return response.status(404).json({ error: `Composer at id ${request.params.id} was not found`});
+// return out of this method and send a response with status 404 and a parsed error message
       } else {
+// if a match is found
         database('compositions').where('composer_id', request.params.id).del()
+// look into database compositions, find the compositions where the composer_id matches the request id, and delete any that match. If a composer is deleted, their compositions are also removed
           .then(() => {
+// after that, we trigger a response with a callback as DELETE does not have a return
             database('composers').where('id', request.params.id).del()
+// look into database composers, find the composer with an id that matches the request id, then delete it
               .then(() => {
+// after that, we trigger a response with a callback as DELETE does not have a return
                 response.status(202)
+// send response with a status 202
                   .json(`Successful delete of composer id ${request.params.id}`)
+// send a message letting informing of the successful delete
               })
           })
       }
     })
     .catch(error => {
+// if an error occurs during this server process, the error will be caught
       response.status(500).json({ error })
+// sends response with status 500 and a parsed copy of the error object
     });
 });
 
 // DELETE a composition
 app.delete('/api/v1/compositions/:id', (request, response) => {
+// calls delete method on app at url in the first parameter. deletes a composition at the given id in url
   let found = false;
+// declare variable to serve as trigger to track if composition at given id was found 
   database('compositions').select()
+// look to dataset composition and get that data
     .then(compositions => {
+// after we get the data, name it composers and...
       compositions.forEach(composition => {
+// for each composition
         if (composition.id === parseInt(request.param.id)) {
+// check to see if the id matches the id in the url
           found = true;
+// if a match is found, assign variable 'found' to true
         }
       });
       if(!found) {
+// if variable 'found' is falsey
         return response.status(404).json({ error: `Composition at id ${request.params.id} was not found`});
+// return out of this method and send a response with status 404 and a parsed error message
       } else {
         database('composition').where('id', request.params.id).del()
+// look into database composers, find the composer with an id that matches the request id, then delete it
           .then(() => {
+// after that, we trigger a response with a callback as DELETE does not have a return
             response.status(202)
+// send response with a status 202
               .json(`Successful delete of composition id ${request.params.id}`)
+// send a message letting informing of the successful delete
+
           })
       }
     })
     .catch(error => {
+// if an error occurs during this server process, the error will be caught
       response.status(500).json({ error })
+// sends response with status 500 and a parsed copy of the error object
     });
 });

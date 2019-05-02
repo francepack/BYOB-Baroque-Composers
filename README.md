@@ -179,7 +179,7 @@ Make get request to composers to see if composer is in the database. If so, use 
 
 ## Delete
 ### DELETE */api/v1/composers/:id*
-**Warning: Deleting a composer will delete all of their compositions**
+#### **_Warning: Deleting a composer will delete all of their compositions_**
 
 Delete a composer of a given id
 

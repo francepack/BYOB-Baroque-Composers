@@ -88,7 +88,6 @@ app.get('/api/v1/composers/:id/compositions', (request, response) => {
 // POST a composer
 app.post('api/v1/composers', (request, response) => {
   const composer = request.body;
-
   for (let requiredParameter of ['name', 'nationality', 'lifespan']) {
     if (!composer[requiredParameter]) {
       return response
@@ -98,7 +97,7 @@ app.post('api/v1/composers', (request, response) => {
   }
   database('composers').insert(composer, 'id')
     .then(composer => {
-      response.status(201).json({ composer })
+      response.status(201).json({ id: composer[0] })
     })
     .catch(error => {
       response.status(500).json({ error })
@@ -108,7 +107,6 @@ app.post('api/v1/composers', (request, response) => {
 // POST a composition
 app.post('api/v1/composers/:id/compositions', (request, response) => {
   const composition = request.body;
-
   for (let requiredParameter of ['name', 'arrangedFor']) {
     if(!composition[requiredParameter]) {
       return response
@@ -116,9 +114,18 @@ app.post('api/v1/composers/:id/compositions', (request, response) => {
         .send({ error: `Expected format: { name: <string>, arrangedFor: <string>, composer_id: <string> }`});
     }
   }
+  database('composers').where('id', request.params.id).select()
+    .then(composer => {
+      if (!composer) {
+        return response
+          .status(422)
+          .json(`No composer at id ${request.params.id} was found. Please check id in url, or post composer before adding this composition`)
+      }
+    });
+
   database('compositions').insert({...composition, composer_id: request.params.id}, 'id')
     .then(composition => {
-      response.status(201).json({ composition })  
+      response.status(201).json({ id: composition[0] })  
     })
     .catch(error => {
       response.status(500).json({ error })

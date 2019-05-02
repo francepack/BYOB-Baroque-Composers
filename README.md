@@ -149,7 +149,7 @@ Add a composer to the database
 #### POST '/api/v1/composers/:id/composition'
 Add a composition to the database.
 **Note: This compositions composer must also be in the database**
-Make get request to composers to see if composer is in the database. If so, use their id in the url. If not, consider finding their full name, nationality, and lifespan to first make a POST for a new composer.
+Make get request to composers to see if composer is in the database. If so, use their id in the url. If not, consider submitting their full name, nationality, and lifespan to first make a POST for a new composer. (see POST '/api/v1/composers')
 **Request-Body Input Description**
 | Key Name | Data Type | Description |
 | ---- | ---- | ---- |
@@ -166,11 +166,15 @@ Make get request to composers to see if composer is in the database. If so, use 
 ### Delete
 #### DELETE '/api/v1/composers/:id'
 **Warning: Deleting a composer will delete all of their compositions**
+Delete a composer of a given id
 **Example Response**
 ```
+  `Successful delete of composer id 29`
 ```
 
 #### DELETE '/api/v1/compositions/:id'
+Delete a composition of a given id
 **Example Response**
 ```
+  `Successful delete of composition id 18`
 ```

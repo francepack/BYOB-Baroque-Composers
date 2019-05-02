@@ -135,48 +135,77 @@ app.get('/api/v1/composers/:id/compositions', (request, response) => {
 
 // POST a composer
 app.post('api/v1/composers', (request, response) => {
+// calls post method on app at url in the first parameter. user will provide a body which will be used to post a new composer to the database
   const composer = request.body;
+// declare variable composer as the body of the request made by user making post request
   for (let requiredParameter of ['name', 'nationality', 'lifespan']) {
+// using a for...of statement, we declare requiredParameters as an iteration over the strings in the array after 'of'. These strings are the keys we want to have truthy values in for a valid composer entry
     if (!composer[requiredParameter]) {
+// as the iteration runs, we check to see if composer doesn't have, or doesn't have value in, any key of the strings we are iterating over
       return response
+// if any desired key is missing or doesn't have value, we return out with a response
         .status(422)
+// respose has status 422...
         .send({ error: `Expected format: { name: <string>, nationality: <string>, lifespan: <string> }`});
+// and sends an error with custom message, reminding user of needed keys and format of entry
     }
   }
   database('composers').insert(composer, 'id')
+// if the validation doesn't reach a return, we get here, going to database composers and inserting a composer as the users input and an id
     .then(composer => {
+// after we insert the new composer, we are given back an array containing the added composer that we name composer
       response.status(201).json({ id: composer[0] })
+// we send back a response with a status 201 and with a parsed object with a key id that has a value of the newly assigned id of the composer in the returned array (hence, we use index 0)
     })
     .catch(error => {
+// if an error occurs during this server process, the error will be caught
       response.status(500).json({ error })
+// sends response with status 500 and a parsed copy of the error object
     });
 });
 
 // POST a composition
 app.post('api/v1/composers/:id/compositions', (request, response) => {
+// calls post method on app at url in the first parameter. user will provide a body which will be used to post a new composition to the database
   const composition = request.body;
+// declare variable composition as the body of the request made by user making post request
   for (let requiredParameter of ['name', 'arrangedFor']) {
+// using a for...of statement, we declare requiredParameters as an iteration over the strings in the array after 'of'. These strings are the keys we want to have truthy values in for a valid composition entry
     if(!composition[requiredParameter]) {
+// as the iteration runs, we check to see if composer doesn't have, or doesn't have value in, any key of the strings we are iterating over
       return response
+// if any desired key is missing or doesn't have value, we return out with a response
         .status(422)
+// respose has status 422...
         .send({ error: `Expected format: { name: <string>, arrangedFor: <string>, composer_id: <string> }`});
+// and sends an error with custom message, reminding user of needed keys and format of entry
     }
   }
   database('composers').where('id', request.params.id).select()
+// start a check to make sure there is a composer in the database that the poster includes in the post url. We look in database composers, and specifically for an id that matches the url id given, and select that
     .then(composer => {
+// we call the return composer
       if (!composer) {
+// we check to make sure the return has value
         return response
+// if it doesn't, we return out and send a response to avoid adding a composition of a composer we do not have
           .status(422)
+// response has status 422, meaning the type of data sent was recognized, but it couldn't be procesed...
           .json(`No composer at id ${request.params.id} was found. Please check id in url, or post composer before adding this composition`)
+// and send a message explaining why the composition could not be added
       }
     });
-
   database('compositions').insert({...composition, composer_id: request.params.id}, 'id')
+// if the validation doesn't reach a return, we get here, going to database compositions and inserting a composition as the users input, the composer_id that matches the verified id in the params, and an individual id
     .then(composition => {
-      response.status(201).json({ id: composition[0] })  
+// after we insert the new composition, we are given back an array containing the added composition that we name composition
+      response.status(201).json({ id: composition[0] }) 
+// we send back a response with a status 201 and with a parsed object with a key id that has a value of the newly assigned id of the composition in the returned array (hence, we use index 0) 
     })
     .catch(error => {
+// if an error occurs during this server process, the error will be caught
       response.status(500).json({ error })
+// sends response with status 500 and a parsed copy of the error object
     });
 });
 

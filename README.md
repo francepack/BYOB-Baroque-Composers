@@ -2,12 +2,14 @@
 Every choir student should sing something from the Baroque time period. The embellished, complex vocal lines are great learning experiences for any singer. This API holds information about Baroque choral composers and their compositions. Users may add composers and compositions as well. This is build with Knex and Node.js/Express, using PostgreSQL for a database.
 
 ## Deployment
+[Baroque-composers-on-Heroku]()
 
-## API Calls
-### Get
+# API Calls
+## Get
 #### GET '/api/v1/composers'
 Get all composers
-**Example Response**
+
+**Example Response:**
 ```
 [
   {
@@ -38,7 +40,8 @@ Get all composers
 ```
 #### GET '/api/v1/compositions'
 Get all compositions
-**Example Response**
+
+**Example Response:**
 ```
 [
   {
@@ -70,7 +73,8 @@ Get all compositions
 
 #### GET '/api/v1/composers/:id'
 Get a particular composer by id
-**Example Response**
+
+**Example Response:**
 ```
 {
   "id": 25,
@@ -84,7 +88,8 @@ Get a particular composer by id
 
 #### GET '/api/v1/compositions/:id'
 Get a particular composition by id
-**Example Response**
+
+**Example Response:**
 ```
 {
   "id": 55,
@@ -98,7 +103,8 @@ Get a particular composition by id
 
 #### GET '/api/v1/composers/:id/compositions'
 Get all compositions of a composer by composer id
-**Example Response**
+
+**Example Response:**
 ```
 [
   {
@@ -128,16 +134,19 @@ Get all compositions of a composer by composer id
 ]
 ```
 
-### POST
+## POST
 #### POST '/api/v1/composers'
 Add a composer to the database
+
 **Request-Body Input Description**
+
 | Key Name | Data Type | Description |
 | ---- | ---- | ---- |
 | `name` | `string` | Composer's full name |
 | `nationality` | `string` | Birth heritage of composer |
 | `lifespan` | `string` | year born to year of death |
-**Example Request**
+
+**Example Request:**
 ```
 {
   "name": "Mason France",
@@ -147,15 +156,20 @@ Add a composer to the database
 ```
 
 #### POST '/api/v1/composers/:id/composition'
-Add a composition to the database.
+Add a composition to the database 
+
 **Note: This compositions composer must also be in the database**
+
 Make get request to composers to see if composer is in the database. If so, use their id in the url. If not, consider submitting their full name, nationality, and lifespan to first make a POST for a new composer. (see POST '/api/v1/composers')
+
 **Request-Body Input Description**
+
 | Key Name | Data Type | Description |
 | ---- | ---- | ---- |
 | `name` | `string` | Composition's name |
 | `arrangedFor` | `string` | Description of the voice parts and instrumentation |
-**Example Request**
+
+**Example Request:**
 ```
 {
   "name": "Holla Back Girl",
@@ -163,18 +177,21 @@ Make get request to composers to see if composer is in the database. If so, use 
 }
 ```
 
-### Delete
+## Delete
 #### DELETE '/api/v1/composers/:id'
 **Warning: Deleting a composer will delete all of their compositions**
+
 Delete a composer of a given id
-**Example Response**
+
+**Example Response:**
 ```
   `Successful delete of composer id 29`
 ```
 
 #### DELETE '/api/v1/compositions/:id'
 Delete a composition of a given id
-**Example Response**
+
+**Example Response:**
 ```
   `Successful delete of composition id 18`
 ```

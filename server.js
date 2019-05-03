@@ -216,12 +216,13 @@ app.patch('/api/v1/composers/:id', (request, response) => {
         for (let parameter of ['name', 'nationality', 'lifespan']) {
           if (request.body[parameter]) {
             database('composers').where('id', request.params.id).update({[parameter]: request.body[parameter]})
-              .then(composer => {
-                response.status(202).json(`Patch of composer id ${request.params.id} complete.`)
-              })
+              .then(composer => composer)
           }
         }
       }
+    })
+    .then(composer => {
+      response.status(202).json(`Patch of composer id ${request.params.id} complete.`)
     })
     .catch(error => {
       response.status(500).json({ error })
@@ -244,12 +245,13 @@ app.patch('/api/v1/compositions/:id', (request, response) => {
         for (let parameter of ['name', 'arrangedFor']) {
           if (request.body[parameter]) {
             database('compositions').where('id', request.params.id).update({[parameter]: request.body[parameter]})
-              .then(composition => {
-                response.status(202).json(`Patch of composition id ${request.params.id} complete.`)
-              })
+              .then(composition => composition)
           }
         }
       }
+    })
+    .then(composition => {
+      response.status(202).json(`Patch of composition id ${request.params.id} complete.`)
     })
     .catch(error => {
       response.status(500).json({ error })

@@ -1,13 +1,24 @@
-const express = require('express')
+const express = require('express');
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 
-const app = express()
-const port = 3002
-app.use(express.json())
+const app = express();
+const port = 3002;
+app.use(express.json());
 
-app.listen(port, () => console.log(`App listening on port ${port}!`))
+app.listen(port, () => console.log(`App listening on port ${port}!`));
+
+// Error handle methods
+// const send500 = (error) => response.status(500).json({ error })
+// const send404 = (message) => response.status(404).json({ error: message })
+// const send422 = (message) => response.status(422).send({ error: message })
+
+// Success handle - 200, 201, 202
+
+// Helper methods
+// findEntry
+// check composer/composition fields
 
 // GET all composers
 app.get('/api/v1/composers', (request, response) => {
@@ -19,7 +30,6 @@ app.get('/api/v1/composers', (request, response) => {
       response.status(500).json({ error });
     });
 });
-
 
 // GET all compositions
 app.get('/api/v1/compositions', (request, response) => {

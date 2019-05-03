@@ -136,7 +136,7 @@ Get all compositions of a composer by composer id.
 
 ## POST
 ### POST */api/v1/composers*
-Add a composer to the database.
+Add a composer to the database. New id is returned if successful.
 
 **Request-Body Input Description**
 
@@ -155,8 +155,16 @@ Add a composer to the database.
 }
 ```
 
+**Example Response:**
+
+```
+{
+  "id": 64
+}
+```
+
 ### POST */api/v1/composers/:id/composition*
-Add a composition to the database 
+Add a composition to the database. New id is returned if successful. 
 
 **Note: This compositions composer must also be in the database**
 
@@ -174,6 +182,14 @@ Make get request to composers to see if composer is in the database. If so, use 
 {
   "name": "Holla Back Girl",
   "arrangedFor": "1 Sop solo, SSAATB choir, drum synth, full orchestra"
+}
+```
+
+**Example Response:**
+
+```
+{
+  "id": 32
 }
 ```
 
@@ -198,10 +214,33 @@ Replace a composer at id in url. All fields must be entered.
 }
 ```
 
+**Example Response:**
+
+```Replacement of composer id 22 complete.```
+
 ### PUT */api/v1/compositions/:id*
 Replace a composition at id in url. All fields must be entered.
 
 **Note: Cannot change a composition's composer_id. If composer_id was incorrectly input, please delete entry and create a new one**
+
+**Request-Body Input Description**
+
+| Key Name | Data Type | Description |
+| ---- | :----: | ---- |
+| **name** | `string` | Composition's name |
+| **arrangedFor** | `string` | Chorus voice part/instrumentation description |
+
+**Example Request:**
+```
+{
+  "name": "Nikola Jokic",
+  "arrangedFor": "double chorus"
+}
+```
+
+**Example Response:**
+
+```Replacement of composition id 22 complete.```
 
 ## Patch
 ### PATCH */api/v1/composers/:id*
@@ -225,6 +264,10 @@ Any of the three listed keys can be included, all are not required.
 }
 ```
 
+**Example Response:**
+
+```Patch of composer id 34 complete.```
+
 ### PATCH */api/v1/compositions/:id*
 Edit a composition at id in url. 
 
@@ -246,6 +289,10 @@ Either or both key can be included, obth are not required
 }
 ```
 
+**Example Response:**
+
+```Patch of composition id 21 complete.```
+
 ## Delete
 ### DELETE */api/v1/composers/:id*
 #### **_Warning: Deleting a composer will delete all of their compositions_**
@@ -254,7 +301,7 @@ Delete a composer of a given id
 
 **Example Response:**
 ```
-  `Successful delete of composer id 29`
+  `Successful deletion of composer id 29`
 ```
 
 ### DELETE */api/v1/compositions/:id*
@@ -262,5 +309,5 @@ Delete a composition of a given id
 
 **Example Response:**
 ```
-  `Successful delete of composition id 18`
+  `Successful deletion of composition id 18`
 ```

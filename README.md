@@ -177,6 +177,75 @@ Make get request to composers to see if composer is in the database. If so, use 
 }
 ```
 
+## Put
+### PUT */api/v1/composers/:id*
+Replace a composer at id in url. All fields must be entered.
+
+**Request-Body Input Description**
+
+| Key Name | Data Type | Description |
+| ---- | :----: | ---- |
+| **name** | `string` | Composer's full name |
+| **nationality** | `string` | Birth heritage of composer |
+| **lifespan** | `string` | year born to year of death |
+
+**Example Request:**
+```
+{
+  "name": "Nikola Jokic",
+  "nationality": "Serbian",
+  "lifespan": "1639-1692"
+}
+```
+
+### PUT */api/v1/compositions/:id*
+Replace a composition at id in url. All fields must be entered.
+
+**Note: Cannot change a composition's composer_id. If composer_id was incorrectly input, please delete entry and create a new one**
+
+## Patch
+### PATCH */api/v1/composers/:id*
+Edit a composer at id in url. 
+
+**Request-Body Input Description**
+
+Any of the three listed keys can be included, all are not required.
+
+| Key Name | Data Type | Description |
+| ---- | :----: | ---- |
+| **name** | `string` | Composer's full name |
+| **nationality** | `string` | Birth heritage of composer |
+| **lifespan** | `string` | year born to year of death |
+
+**Example Request:**
+```
+{
+  "nationality": "English",
+  "lifespan": "1660- 1701"
+}
+```
+
+### PATCH */api/v1/compositions/:id*
+Edit a composition at id in url. 
+
+**Note: Cannot change a composition's composer_id. If composer_id was incorrectly input, please delete entry and create a new one**
+
+**Request-Body Input Description**
+
+Either or both key can be included, obth are not required
+
+| Key Name | Data Type | Description |
+| ---- | :----: | ---- |
+| **name** | `string` | Composition's name |
+| **arrangedFor** | `string` | Chorus voice part/instrumentation description |
+
+**Example Request:**
+```
+{
+  "name": "Update to Songname"
+}
+```
+
 ## Delete
 ### DELETE */api/v1/composers/:id*
 #### **_Warning: Deleting a composer will delete all of their compositions_**

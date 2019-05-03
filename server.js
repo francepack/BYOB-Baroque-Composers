@@ -156,7 +156,7 @@ app.put('/api/v1/composers/:id', (request, response) => {
         lifespan: request.body.lifespan
       })
       .then(composer => {
-        response.status(202).json(`Replacement of id ${request.params.id} complete.`)
+        response.status(202).json(`Replacement of composer id ${request.params.id} complete.`)
       })
     } 
   })
@@ -191,13 +191,69 @@ app.put('/api/v1/compositions/:id', (request, response) => {
         arrangedFor: request.body.arrangedFor
       })
       .then(composition => {
-        response.status(202).json(`Replacement of id ${request.params.id} complete.`)
+        response.status(202).json(`Replacement of composition id ${request.params.id} complete.`)
       })
     } 
   })
   .catch(error => {
     response.status(500).json({ error })
   });
+});
+
+// PATCH existing composer
+app.patch('/api/v1/composers/:id', (request, response) => {
+  let found = false;
+  database('composers').select()
+    .then(composers => {
+      composers.forEach(composer => {
+        if (composer.id === parseInt(request.params.id)) {
+          found = true;
+        }
+      });
+      if(!found) {
+        return response.status(404).json({ error: `Composer at id ${request.params.id} was not found`});
+      } else { 
+        for (let parameter of ['name', 'nationality', 'lifespan']) {
+          if (request.body[parameter]) {
+            database('composers').where('id', request.params.id).update({[parameter]: request.body[parameter]})
+              .then(composer => {
+                response.status(202).json(`Patch of composer id ${request.params.id} complete.`)
+              })
+          }
+        }
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    });
+});
+
+// PATCH existing composition
+app.patch('/api/v1/compositions/:id', (request, response) => {
+  let found = false;
+  database('compositions').select()
+    .then(compositions => {
+      compositions.forEach(composition => {
+        if (composition.id === parseInt(request.params.id)) {
+          found = true;
+        }
+      });
+      if(!found) {
+        return response.status(404).json({ error: `Composition at id ${request.params.id} was not found`});
+      } else { 
+        for (let parameter of ['name', 'arrangedFor']) {
+          if (request.body[parameter]) {
+            database('compositions').where('id', request.params.id).update({[parameter]: request.body[parameter]})
+              .then(composition => {
+                response.status(202).json(`Patch of composition id ${request.params.id} complete.`)
+              })
+          }
+        }
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    });
 });
 
 // DELETE a composer

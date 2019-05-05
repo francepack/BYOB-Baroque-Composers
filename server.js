@@ -4,21 +4,10 @@ const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 
 const app = express();
-app.set('port', process.env.PORT || 3000)
+app.set('port', process.env.PORT || 3000);
 app.use(express.json());
 
 app.listen(app.get('port'), () => console.log(`App listening on port ${app.get('port')}!`));
-
-// Error handle methods
-// const send500 = (error) => response.status(500).json({ error })
-// const send404 = (message) => response.status(404).json({ error: message })
-// const send422 = (message) => response.status(422).send({ error: message })
-
-// Success handle - 200, 201, 202
-
-// Helper methods
-// findEntry
-// check composer/composition fields
 
 // GET all composers
 app.get('/api/v1/composers', (request, response) => {
@@ -81,7 +70,7 @@ app.get('/api/v1/composers/:id/compositions', (request, response) => {
   database('compositions').where('composer_id', request.params.id).select()
     .then(compositions => {
       if (compositions.length) {
-        response.status(200).json(compositions)
+        response.status(200).json(compositions);
       } else {
         response.status(404).json({
           error: `Could not find compositions for composer with id ${request.params.id}`
@@ -98,17 +87,17 @@ app.post('/api/v1/composers', (request, response) => {
   const composer = request.body;
   for (let requiredParameter of ['name', 'nationality', 'lifespan']) {
     if (!composer[requiredParameter]) {
-      return response
-        .status(422)
-        .send({ error: `Expected format: { name: <string>, nationality: <string>, lifespan: <string> }`});
+      return response.status(422).send({ 
+        error: `Expected format: { name: <string>, nationality: <string>, lifespan: <string> }`
+      });
     }
-  }
+  };
   database('composers').insert(composer, 'id')
     .then(composer => {
-      response.status(201).json({ id: composer[0] })
+      response.status(201).json({ id: composer[0] });
     })
     .catch(error => {
-      response.status(500).json({ error })
+      response.status(500).json({ error });
     });
 });
 
@@ -117,25 +106,25 @@ app.post('/api/v1/composers/:id/compositions', (request, response) => {
   const composition = request.body;
   for (let requiredParameter of ['name', 'arrangedFor']) {
     if(!composition[requiredParameter]) {
-      return response
-        .status(422)
-        .send({ error: `Expected format: { name: <string>, arrangedFor: <string>, composer_id: <string> }`});
+      return response.status(422).send({ 
+        error: `Expected format: { name: <string>, arrangedFor: <string>, composer_id: <string> }`
+      });
     }
-  }
+  };
   database('composers').where('id', request.params.id).select()
     .then(composer => {
       if (!composer) {
-        return response
-          .status(422)
-          .json(`No composer at id ${request.params.id} was found. Please check id in url, or post composer before adding this composition`)
+        return response.status(422).json({
+            error: `No composer at id ${request.params.id} was found. Please check id in url, or post composer before adding this composition`
+        });
       }
     });
   database('compositions').insert({...composition, composer_id: request.params.id}, 'id')
     .then(composition => {
-      response.status(201).json({ id: composition[0] }) 
+      response.status(201).json({ id: composition[0] }); 
     })
     .catch(error => {
-      response.status(500).json({ error })
+      response.status(500).json({ error });
     });
 });
 
@@ -144,11 +133,11 @@ app.put('/api/v1/composers/:id', (request, response) => {
   const composer = request.body;
   for (let requiredParameter of ['name', 'nationality', 'lifespan']) {
     if (!composer[requiredParameter]) {
-      return response
-        .status(422)
-        .send({ error: `Expected format: { name: <string>, nationality: <string>, lifespan: <string> }`});
+      return response.status(422).send({ 
+        error: `Expected format: { name: <string>, nationality: <string>, lifespan: <string> }`
+      });
     }
-  }
+  };
   let found = false;
   database('composers').select()
     .then(composers => {
@@ -158,7 +147,9 @@ app.put('/api/v1/composers/:id', (request, response) => {
         }
       });
       if(!found) {
-        return response.status(404).json({ error: `Composer at id ${request.params.id} was not found`});
+        return response.status(404).json({ 
+          error: `Composer at id ${request.params.id} was not found`
+        });
       } else {
       database('composers').where('id', request.params.id).update({
         name: request.body.name,
@@ -166,12 +157,14 @@ app.put('/api/v1/composers/:id', (request, response) => {
         lifespan: request.body.lifespan
       })
       .then(composer => {
-        response.status(202).json(`Replacement of composer id ${request.params.id} complete.`)
-      })
+        response.status(202).json( 
+          `Replacement of composer id ${request.params.id} complete.`
+        );
+      });
     } 
   })
   .catch(error => {
-    response.status(500).json({ error })
+    response.status(500).json({ error });
   });
 });
 
@@ -180,11 +173,11 @@ app.put('/api/v1/compositions/:id', (request, response) => {
   const composition = request.body;
   for (let requiredParameter of ['name', 'arrangedFor']) {
     if (!composition[requiredParameter]) {
-      return response
-        .status(422)
-        .send({ error: `Expected format: { name: <string>, arrangedFor: <string> }`});
+      return response.status(422).send({ 
+        error: `Expected format: { name: <string>, arrangedFor: <string> }`
+      });
     }
-  }
+  };
   let found = false;
   database('compositions').select()
     .then(compositions => {
@@ -194,19 +187,23 @@ app.put('/api/v1/compositions/:id', (request, response) => {
         }
       });
       if(!found) {
-        return response.status(404).json({ error: `Composition at id ${request.params.id} was not found`});
+        return response.status(404).json({ 
+          error: `Composition at id ${request.params.id} was not found`
+        });
       } else {
       database('compositions').where('id', request.params.id).update({
         name: request.body.name,
         arrangedFor: request.body.arrangedFor
       })
       .then(composition => {
-        response.status(202).json(`Replacement of composition id ${request.params.id} complete.`)
-      })
+        response.status(202).json(
+          `Replacement of composition id ${request.params.id} complete.`
+        );
+      });
     } 
   })
   .catch(error => {
-    response.status(500).json({ error })
+    response.status(500).json({ error });
   });
 });
 
@@ -221,21 +218,25 @@ app.patch('/api/v1/composers/:id', (request, response) => {
         }
       });
       if(!found) {
-        return response.status(404).json({ error: `Composer at id ${request.params.id} was not found`});
+        return response.status(404).json({ 
+          error: `Composer at id ${request.params.id} was not found`
+        });
       } else { 
         for (let parameter of ['name', 'nationality', 'lifespan']) {
           if (request.body[parameter]) {
             database('composers').where('id', request.params.id).update({[parameter]: request.body[parameter]})
-              .then(composer => composer)
+              .then(composer => composer);
           }
-        }
+        };
       }
     })
     .then(composer => {
-      response.status(202).json(`Patch of composer id ${request.params.id} complete.`)
+      response.status(202).json(
+        `Patch of composer id ${request.params.id} complete.`
+      );
     })
     .catch(error => {
-      response.status(500).json({ error })
+      response.status(500).json({ error });
     });
 });
 
@@ -250,21 +251,25 @@ app.patch('/api/v1/compositions/:id', (request, response) => {
         }
       });
       if(!found) {
-        return response.status(404).json({ error: `Composition at id ${request.params.id} was not found`});
+        return response.status(404).json({ 
+          error: `Composition at id ${request.params.id} was not found`
+        });
       } else { 
         for (let parameter of ['name', 'arrangedFor']) {
           if (request.body[parameter]) {
             database('compositions').where('id', request.params.id).update({[parameter]: request.body[parameter]})
-              .then(composition => composition)
+              .then(composition => composition);
           }
-        }
+        };
       }
     })
     .then(composition => {
-      response.status(202).json(`Patch of composition id ${request.params.id} complete.`)
+      response.status(202).json(
+        `Patch of composition id ${request.params.id} complete.`
+      );
     })
     .catch(error => {
-      response.status(500).json({ error })
+      response.status(500).json({ error });
     });
 });
 
@@ -279,20 +284,23 @@ app.delete('/api/v1/composers/:id', (request, response) => {
         }
       });
       if(!found) {
-        return response.status(404).json({ error: `Composer at id ${request.params.id} was not found`});
+        return response.status(404).json({ 
+          error: `Composer at id ${request.params.id} was not found`
+        });
       } else {
         database('compositions').where('composer_id', request.params.id).del()
           .then(() => {
             database('composers').where('id', request.params.id).del()
               .then(() => {
-                response.status(202)
-                  .json(`Successful deletion of composer id ${request.params.id}`)
-              })
-          })
+                response.status(202).json(
+                  `Successful deletion of composer id ${request.params.id}`
+                );
+              });
+          });
       }
     })
     .catch(error => {
-      response.status(500).json({ error })
+      response.status(500).json({ error });
     });
 });
 
@@ -307,16 +315,19 @@ app.delete('/api/v1/compositions/:id', (request, response) => {
         }
       });
       if(!found) {
-        return response.status(404).json({ error: `Composition at id ${request.params.id} was not found`});
+        return response.status(404).json({ 
+          error: `Composition at id ${request.params.id} was not found`
+        });
       } else {
         database('compositions').where('id', request.params.id).del()
           .then(() => {
-            response.status(202)
-              .json(`Successful deletion of composition id ${request.params.id}`)
-          })
+            response.status(202).json(
+              `Successful deletion of composition id ${request.params.id}`
+            );
+          });
       }
     })
     .catch(error => {
-      response.status(500).json({ error })
+      response.status(500).json({ error });
     });
 });

@@ -2,7 +2,7 @@
 Every choir student should sing something from the Baroque time period. The embellished, complex vocal lines are great learning experiences for any singer. This API holds information about Baroque choral composers and their compositions. Users may add composers and compositions as well. This is build with Knex and Node.js/Express, using PostgreSQL for a database.
 
 ## Deployment
-[Baroque-composers-on-Heroku]()
+[Baroque-composers-on-Heroku](https://baroque-choral-composers.herokuapp.com/api/v1/composers/)
 
 # API Calls
 ## Get

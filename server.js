@@ -403,6 +403,7 @@ app.patch('/api/v1/compositions/:id', (request, response) => {
           found = true;
 // if a match is found, reassign var found to true
         }
+      });
       if(!found) {
 // if variable 'found' is falsey...
         return response.status(404).json({ 

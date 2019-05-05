@@ -208,204 +208,328 @@ app.post('/api/v1/composers/:id/compositions', (request, response) => {
 
 // PUT existing composer
 app.put('/api/v1/composers/:id', (request, response) => {
+// calls put method on app at url in the first parameter. Will replace the composer at the given id with new information
   const composer = request.body;
+// declare variable composer as the body of the request made by user making put request
   for (let requiredParameter of ['name', 'nationality', 'lifespan']) {
+// using a for...of statement, we declare requiredParameters as an iteration over the strings in the array after 'of'. These strings are the keys we want to have truthy values in for a valid composer entry
     if (!composer[requiredParameter]) {
+// as the iteration runs, we check to see if composer doesn't have, or doesn't have value in, any key of the strings we are iterating over
       return response.status(422).send({ 
+// if any desired key is missing or doesn't have value, we return out with a response with a status 422 and...
         error: `Expected format: { name: <string>, nationality: <string>, lifespan: <string> }`
+// a custom error message, reminding user of needed keys and format of entry
       });
     }
   };
   let found = false;
+// declare variable to serve as trigger to track if composer at given id was found 
   database('composers').select()
+// Look into the composers database
     .then(composers => {
+// when we get that data...
       composers.forEach(composer => {
+// for each composer in the data...
         if (composer.id === parseInt(request.params.id)) {
+// check to see if the id included in the user input url matches an id a composer has
           found = true;
+// if a match is found, reassign var found to true
         }
       });
       if(!found) {
+// if variable 'found' is falsey...
         return response.status(404).json({ 
+// return out of this method and send a response with status 404 and...
           error: `Composer at id ${request.params.id} was not found`
+// a custom error message that the specfied composer was unfound
         });
       } else {
+// if a match is found...
       database('composers').where('id', request.params.id).update({
+// look into database composers, find the composer with an id that matches the request id, then make an update to it
         name: request.body.name,
+// name is now what the user has input in the request boday
         nationality: request.body.nationality,
+// nationality is now what the user has input in the request boday
         lifespan: request.body.lifespan
+// lifespan is now what the user has input in the request boday
       })
       .then(composer => {
+// when the update has completed...
         response.status(202).json( 
+// send a response with status 202...
           `Replacement of composer id ${request.params.id} complete.`
+// and a custom message letting the user know the update was successful
         );
       });
     } 
   })
   .catch(error => {
+// if an error occurs during this server process, the error will be caught
     response.status(500).json({ error });
+// sends response with status 500 and a parsed copy of the error object
   });
 });
 
 // PUT existing composition
 app.put('/api/v1/compositions/:id', (request, response) => {
+// calls put method on app at url in the first parameter. Will replace the composition at the given id with new information
   const composition = request.body;
+// declare variable composition as the body of the request made by user making put request
   for (let requiredParameter of ['name', 'arrangedFor']) {
+// using a for...of statement, we declare requiredParameters as an iteration over the strings in the array after 'of'. These strings are the keys we want to have truthy values in for a valid composition entry
     if (!composition[requiredParameter]) {
+// as the iteration runs, we check to see if composition doesn't have, or doesn't have value in, any key of the strings we are iterating over
       return response.status(422).send({ 
+// if any desired key is missing or doesn't have value, we return out with a response with a status 422 and...
         error: `Expected format: { name: <string>, arrangedFor: <string> }`
+// a custom error message, reminding user of needed keys and format of entry
       });
     }
   };
   let found = false;
+// declare variable to serve as trigger to track if composition at given id was found 
   database('compositions').select()
+// Look into the compositions database
     .then(compositions => {
+// when we get that data...
       compositions.forEach(composition => {
+// for each composition in the data...
         if (composition.id === parseInt(request.params.id)) {
+// check to see if the id included in the user input url matches an id a composition has
           found = true;
+// if a match is found, reassign var found to true
         }
       });
       if(!found) {
+// if variable 'found' is falsey...
         return response.status(404).json({ 
+// return out of this method and send a response with status 404 and...
           error: `Composition at id ${request.params.id} was not found`
+// a custom error message that the specfied composition was unfound
         });
       } else {
+// if a match is found...
       database('compositions').where('id', request.params.id).update({
+// look into database compositions, find the composition with an id that matches the request id, then make an update to it
         name: request.body.name,
+// name is now what the user has input in the request boday
         arrangedFor: request.body.arrangedFor
+// arrangedFor is now what the user has input in the request boday
       })
       .then(composition => {
+// when the update has completed...
         response.status(202).json(
+// send a response with status 202...
           `Replacement of composition id ${request.params.id} complete.`
+// and a custom message letting the user know the update was successful
         );
       });
     } 
   })
   .catch(error => {
+// if an error occurs during this server process, the error will be caught
     response.status(500).json({ error });
+// sends response with status 500 and a parsed copy of the error object
   });
 });
 
 // PATCH existing composer
 app.patch('/api/v1/composers/:id', (request, response) => {
+// calls patch method on app at url in the first parameter. Will revise any number of keys of the composer at the given id 
   let found = false;
+// declare variable to serve as trigger to track if composer at given id was found 
   database('composers').select()
+// Look into the composers database
     .then(composers => {
+// when we get that data...
       composers.forEach(composer => {
+// for each composer in the data...
         if (composer.id === parseInt(request.params.id)) {
+// check to see if the id included in the user input url matches an id a composer has
           found = true;
+// if a match is found, reassign var found to true
         }
       });
       if(!found) {
+// if variable 'found' is falsey...
         return response.status(404).json({ 
+// return out of this method and send a response with status 404 and...
           error: `Composer at id ${request.params.id} was not found`
+// a custom error message that the specfied composer was unfound
         });
       } else { 
+// if a match is found...
         for (let parameter of ['name', 'nationality', 'lifespan']) {
+// use a for ... of statement to define the keys of composer as parameters
           if (request.body[parameter]) {
+// if the request body includes keys that we have deifned as parameters...
             database('composers').where('id', request.params.id).update({[parameter]: request.body[parameter]})
+// make an update of that parameter key to make the new value what the user has in the request body
               .then(composer => composer);
+// after we make the update, send the data back. This line resolves the promise
           }
         };
       }
     })
     .then(composer => {
+// when the update has completed...
       response.status(202).json(
+// send a response with status 202...
         `Patch of composer id ${request.params.id} complete.`
+// and a custom message letting the user know the update was successful
       );
     })
     .catch(error => {
+// if an error occurs during this server process, the error will be caught
       response.status(500).json({ error });
+// sends response with status 500 and a parsed copy of the error object
     });
 });
 
 // PATCH existing composition
 app.patch('/api/v1/compositions/:id', (request, response) => {
+// calls patch method on app at url in the first parameter. Will revise any number of keys of the composition at the given id 
   let found = false;
+// declare variable to serve as trigger to track if composition at given id was found 
   database('compositions').select()
+// Look into the compositions database
     .then(compositions => {
+// when we get that data...
       compositions.forEach(composition => {
+// for each composition in the data...
         if (composition.id === parseInt(request.params.id)) {
+// check to see if the id included in the user input url matches an id a composition has
           found = true;
+// if a match is found, reassign var found to true
         }
-      });
       if(!found) {
+// if variable 'found' is falsey...
         return response.status(404).json({ 
+// return out of this method and send a response with status 404 and...
           error: `Composition at id ${request.params.id} was not found`
+// a custom error message that the specfied composition was unfound
         });
       } else { 
+// if a match is found...
         for (let parameter of ['name', 'arrangedFor']) {
+// use a for ... of statement to define the keys of composition as parameters
           if (request.body[parameter]) {
+// if the request body includes keys that we have deifned as parameters...
             database('compositions').where('id', request.params.id).update({[parameter]: request.body[parameter]})
+// make an update of that parameter key to make the new value what the user has in the request body
               .then(composition => composition);
+// after we make the update, send the data back. This line resolves the promise
           }
         };
       }
     })
     .then(composition => {
+// when the update has completed...
       response.status(202).json(
+// send a response with status 202...
         `Patch of composition id ${request.params.id} complete.`
+// and a custom message letting the user know the update was successful
       );
     })
     .catch(error => {
+// if an error occurs during this server process, the error will be caught
       response.status(500).json({ error });
+// sends response with status 500 and a parsed copy of the error object
     });
 });
 
 // DELETE a composer
 app.delete('/api/v1/composers/:id', (request, response) => {
+// calls delete method on app at url in the first parameter. deletes a composer at the given id in url
   let found = false;
+// declare variable to serve as trigger to track if composer at given id was found 
   database('composers').select()
+// look to dataset composer and get that data
     .then(composers => {
+// after we get the data, name it composers and...
       composers.forEach(composer => {
+// for each composer... 
         if (composer.id === parseInt(request.params.id)) {
+// check to see if the id matches the id in the url
           found = true;
+// if a match is found, assign variable 'found' to true
         }
       });
       if(!found) {
+// if variable 'found' is falsey...
         return response.status(404).json({ 
+// return out of this method and send a response with status 404 and...
           error: `Composer at id ${request.params.id} was not found`
+// a custom error message that the specfied composer was unfound
         });
       } else {
+// if a match is found...
         database('compositions').where('composer_id', request.params.id).del()
+// look into database compositions, find the compositions where the composer_id matches the request id, and delete any that match. If a composer is deleted, their compositions are also removed
           .then(() => {
+// after that, we trigger a response with a callback as DELETE does not have a return
             database('composers').where('id', request.params.id).del()
+// look into database composers, find the composer with an id that matches the request id, then delete it
               .then(() => {
+// after that, we trigger a response with a callback as DELETE does not have a return
                 response.status(202).json(
+// send response with a status 202...
                   `Successful deletion of composer id ${request.params.id}`
+// and a message letting informing of the successful delete
                 );
               });
           });
       }
     })
     .catch(error => {
+// if an error occurs during this server process, the error will be caught
       response.status(500).json({ error });
+// sends response with status 500 and a parsed copy of the error object
     });
 });
 
 // DELETE a composition
 app.delete('/api/v1/compositions/:id', (request, response) => {
+// calls delete method on app at url in the first parameter. deletes a composition at the given id in url
   let found = false;
+// declare variable to serve as trigger to track if composition at given id was found 
   database('compositions').select()
+// look to dataset composition and get that data
     .then(compositions => {
+// after we get the data, name it composers and...
       compositions.forEach(composition => {
+// for each composition...
         if (composition.id === parseInt(request.params.id)) {
+// check to see if the id matches the id in the url
           found = true;
+// if a match is found, assign variable 'found' to true
         }
       });
       if(!found) {
+// if variable 'found' is falsey
         return response.status(404).json({ 
+// return out of this method and send a response with status 404 and...
           error: `Composition at id ${request.params.id} was not found`
+// a custom error message that the specfied composition was unfound
         });
       } else {
+// if a match is found...
         database('compositions').where('id', request.params.id).del()
+// look into database composers, find the composer with an id that matches the request id, then delete it
           .then(() => {
+// after that, we trigger a response with a callback as DELETE does not have a return
             response.status(202).json(
+// send response with a status 202 and...
               `Successful deletion of composition id ${request.params.id}`
+// and a message letting informing of the successful delete 
             );
           });
       }
     })
     .catch(error => {
+// if an error occurs during this server process, the error will be caught
       response.status(500).json({ error });
+// sends response with status 500 and a parsed copy of the error object
     });
 });

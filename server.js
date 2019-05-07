@@ -21,7 +21,7 @@ app.listen(app.get('port'), () => console.log(`App listening on port ${app.get('
 app.get('/api/v1/composers', (request, response) => {
 // calls get method on app at url in the first parameter. gets all composers
   database('composers').select()
-// tells which database to use and gives us that data
+// look in the database for table 'composers' and give us that data
     .then((composers) => {
 // when we get the data, do something to it. data is defined as composers
       response.status(200).json(composers);
@@ -38,7 +38,7 @@ app.get('/api/v1/composers', (request, response) => {
 app.get('/api/v1/compositions', (request, response) => {
 // calls get method on app at url in the first parameter. gets all compositions
   database('compositions').select()
-// tells which database to use and gives us that data
+// look in the database for table 'compositions' and give us that data
     .then((compositions) => {
 // when we get the data, do something to it. data is defined as choralWorks
       response.status(200).json(compositions);
@@ -55,7 +55,7 @@ app.get('/api/v1/compositions', (request, response) => {
 app.get('/api/v1/composers/:id', (request, response) => {
 // calls get method on app at url in the first parameter. gets a composer at the input id
   database('composers').where('id', request.params.id).select()
-// tells which database to look in, and where specifically- finds an id that matches the id in the request url
+// tells which table to look in, and where specifically- finds an id that matches the id in the request url
     .then(composer => {
 // when we get the requested composer, do something to it. data is defined as composer
       if (composer.length) {
@@ -82,7 +82,7 @@ app.get('/api/v1/composers/:id', (request, response) => {
 app.get('/api/v1/compositions/:id', (request, response) => {
 // calls get method on app at url in the first parameter. gets a composition at the input id
   database('compositions').where('id', request.params.id).select()
-// tells which database to look in, and where specifically- finds an id that matches the id in the request url
+// tells which table to look in, and where specifically- finds an id that matches the id in the request url
     .then(composition => {
 // when we get the requested composition, do something to it. data is defined as composition
       if (composition.length) {
@@ -109,7 +109,7 @@ app.get('/api/v1/compositions/:id', (request, response) => {
 app.get('/api/v1/composers/:id/compositions', (request, response) => {
 // calls get method on app at url in the first parameter. gets all compositions of the composer at the input id
   database('compositions').where('composer_id', request.params.id).select()
-// tells which database to look in, and where specifically- finds composer ids that match the id in the request url
+// tells which table to look in, and where specifically- finds composer ids that match the id in the request url
     .then(compositions => {
 // when we get the requested compositions, do something to it. data is defined as compositions
       if (compositions.length) {
@@ -150,7 +150,7 @@ app.post('/api/v1/composers', (request, response) => {
     }
   };
   database('composers').insert(composer, 'id')
-// if the validation doesn't reach a return, we get here, going to database composers and inserting a composer as the users input and an id
+// if the validation doesn't reach a return, we get here, going to table composers and inserting a composer as the users input and an id
     .then(composer => {
 // after we insert the new composer, we are given back an array containing the added composer that we name composer
       response.status(201).json({ id: composer[0] });
@@ -180,7 +180,7 @@ app.post('/api/v1/composers/:id/compositions', (request, response) => {
     }
   };
   database('composers').where('id', request.params.id).select()
-// start a check to make sure there is a composer in the database that the poster includes in the post url. We look in database composers, and specifically for an id that matches the url id given, and select that
+// start a check to make sure there is a composer in the database that the poster includes in the post url. We look in table composers, and specifically for an id that matches the url id given, and select that
     .then(composer => {
 // we call the returned composer
       if (!composer) {
@@ -193,7 +193,7 @@ app.post('/api/v1/composers/:id/compositions', (request, response) => {
       }
     });
   database('compositions').insert({...composition, composer_id: request.params.id}, 'id')
-// if the validation doesn't reach a return, we get here, going to database compositions and inserting a composition as the users input, the composer_id that matches the verified id in the params, and an individual id
+// if the validation doesn't reach a return, we get here, going to table compositions and inserting a composition as the users input, the composer_id that matches the verified id in the params, and an individual id
     .then(composition => {
 // after we insert the new composition, we are given back an array containing the added composition that we name composition
       response.status(201).json({ id: composition[0] });
@@ -225,7 +225,7 @@ app.put('/api/v1/composers/:id', (request, response) => {
   let found = false;
 // declare variable to serve as trigger to track if composer at given id was found 
   database('composers').select()
-// Look into the composers database
+// Look into the composers table
     .then(composers => {
 // when we get that data...
       composers.forEach(composer => {
@@ -246,7 +246,7 @@ app.put('/api/v1/composers/:id', (request, response) => {
       } else {
 // if a match is found...
       database('composers').where('id', request.params.id).update({
-// look into database composers, find the composer with an id that matches the request id, then make an update to it
+// look into table composers, find the composer with an id that matches the request id, then make an update to it
         name: request.body.name,
 // name is now what the user has input in the request boday
         nationality: request.body.nationality,
@@ -290,7 +290,7 @@ app.put('/api/v1/compositions/:id', (request, response) => {
   let found = false;
 // declare variable to serve as trigger to track if composition at given id was found 
   database('compositions').select()
-// Look into the compositions database
+// Look into the compositions table
     .then(compositions => {
 // when we get that data...
       compositions.forEach(composition => {
@@ -311,7 +311,7 @@ app.put('/api/v1/compositions/:id', (request, response) => {
       } else {
 // if a match is found...
       database('compositions').where('id', request.params.id).update({
-// look into database compositions, find the composition with an id that matches the request id, then make an update to it
+// look into table compositions, find the composition with an id that matches the request id, then make an update to it
         name: request.body.name,
 // name is now what the user has input in the request boday
         arrangedFor: request.body.arrangedFor
@@ -340,7 +340,7 @@ app.patch('/api/v1/composers/:id', (request, response) => {
   let found = false;
 // declare variable to serve as trigger to track if composer at given id was found 
   database('composers').select()
-// Look into the composers database
+// Look into the composers table
     .then(composers => {
 // when we get that data...
       composers.forEach(composer => {
@@ -393,7 +393,7 @@ app.patch('/api/v1/compositions/:id', (request, response) => {
   let found = false;
 // declare variable to serve as trigger to track if composition at given id was found 
   database('compositions').select()
-// Look into the compositions database
+// Look into the compositions table
     .then(compositions => {
 // when we get that data...
       compositions.forEach(composition => {
@@ -446,7 +446,7 @@ app.delete('/api/v1/composers/:id', (request, response) => {
   let found = false;
 // declare variable to serve as trigger to track if composer at given id was found 
   database('composers').select()
-// look to dataset composer and get that data
+// look to table composer and get that data
     .then(composers => {
 // after we get the data, name it composers and...
       composers.forEach(composer => {
@@ -467,7 +467,7 @@ app.delete('/api/v1/composers/:id', (request, response) => {
       } else {
 // if a match is found...
         database('compositions').where('composer_id', request.params.id).del()
-// look into database compositions, find the compositions where the composer_id matches the request id, and delete any that match. If a composer is deleted, their compositions are also removed
+// look into table compositions, find the compositions where the composer_id matches the request id, and delete any that match. If a composer is deleted, their compositions are also removed
           .then(() => {
 // after that, we trigger a response with a callback as DELETE does not have a return
             database('composers').where('id', request.params.id).del()
@@ -496,7 +496,7 @@ app.delete('/api/v1/compositions/:id', (request, response) => {
   let found = false;
 // declare variable to serve as trigger to track if composition at given id was found 
   database('compositions').select()
-// look to dataset composition and get that data
+// look to table composition and get that data
     .then(compositions => {
 // after we get the data, name it composers and...
       compositions.forEach(composition => {
@@ -517,7 +517,7 @@ app.delete('/api/v1/compositions/:id', (request, response) => {
       } else {
 // if a match is found...
         database('compositions').where('id', request.params.id).del()
-// look into database composers, find the composer with an id that matches the request id, then delete it
+// look into table composers, find the composer with an id that matches the request id, then delete it
           .then(() => {
 // after that, we trigger a response with a callback as DELETE does not have a return
             response.status(202).json(

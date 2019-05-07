@@ -146,7 +146,7 @@ Add a composer to the database. New id is returned if successful.
 | **nationality** | `string` | Birth heritage of composer |
 | **lifespan** | `string` | year born to year of death |
 
-**Example Request:**
+**Example Request Body:**
 ```
 {
   "name": "Mason France",
@@ -177,7 +177,7 @@ Make get request to composers to see if composer is in the database. If so, use 
 | **name** | `string` | Composition's name |
 | **arrangedFor** | `string` | Chorus voice part/instrumentation description |
 
-**Example Request:**
+**Example Request Body:**
 ```
 {
   "name": "Holla Back Girl",
@@ -205,7 +205,7 @@ Replace a composer at id in url. All fields must be entered.
 | **nationality** | `string` | Birth heritage of composer |
 | **lifespan** | `string` | year born to year of death |
 
-**Example Request:**
+**Example Request Body:**
 ```
 {
   "name": "Nikola Jokic",
@@ -230,7 +230,7 @@ Replace a composition at id in url. All fields must be entered.
 | **name** | `string` | Composition's name |
 | **arrangedFor** | `string` | Chorus voice part/instrumentation description |
 
-**Example Request:**
+**Example Request Body:**
 ```
 {
   "name": "Nikola Jokic",
@@ -256,7 +256,7 @@ Any of the three listed keys can be included, all are not required.
 | **nationality** | `string` | Birth heritage of composer |
 | **lifespan** | `string` | year born to year of death |
 
-**Example Request:**
+**Example Request Body:**
 ```
 {
   "nationality": "English",
@@ -282,7 +282,7 @@ Either or both key can be included, obth are not required
 | **name** | `string` | Composition's name |
 | **arrangedFor** | `string` | Chorus voice part/instrumentation description |
 
-**Example Request:**
+**Example Request Body:**
 ```
 {
   "name": "Update to Songname"
